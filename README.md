@@ -8,11 +8,13 @@ ROS2 workspace for EVT's MINI-ROB autonomous vehicle project
 <br>
 
 **build the Docker Container:**
+
 ``
 docker build -t ros2_image .
 ``
 
 **Run the Docker Container:**
+
 ``
 docker run -it ros2_image
 ``
