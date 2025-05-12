@@ -1,7 +1,7 @@
 # ROB-ROS2
 ROS2 workspace for EVT's MINI-ROB autonomous vehicle project
 
-# Docker
+## Docker
 **Build the Docker Image:**
 1. run docker engine in docker desktop
 2. Open a terminal, cd to the directory containing your Dockerfile and run these 2 commands:
