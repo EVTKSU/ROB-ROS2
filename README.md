@@ -25,32 +25,41 @@ For new developers setting up the workspace:
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/YOUR_TEAM/ROB-ROS2.git
+git clone https://github.com/EVTKSU/ROB-ROS2.git
 cd ROB-ROS2
 ```
 
-2. Install ROS 2 Jazzy (if not already installed). Follow the official instructions:
-   https://docs.ros.org/en/jazzy/Installation.html
+2. Install ROS 2 Jazzy (if not already installed).  
+   Recommended: Debian-based installation for Ubuntu:
+   https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debians.html
 
-3. Source ROS 2 before building:
+3. Install required ROS build tools:
+
+```bash
+sudo apt update
+sudo apt install python3-colcon-common-extensions
+```
+
+4. Source your ROS 2 installation (must be done in every terminal):
 
 ```bash
 source /opt/ros/jazzy/setup.bash
 ```
 
-4. Build the workspace:
+5. Build the workspace:
 
 ```bash
 colcon build
 ```
 
-5. Source the overlay:
+6. Source the workspace overlay:
 
 ```bash
 source install/setup.bash
 ```
 
-You are now ready to run nodes or launch files.
+You are now ready to run ROS nodes or launch files in this workspace.
+
 
 ---
 
