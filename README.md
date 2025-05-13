@@ -53,9 +53,10 @@ ROB-ROS2/                 # Repository root
 │   │   ├── pub_sub_demo/ # Minimal pub/sub example
 │   │   └── service_demo/ # Minimal service/client example
 │   └── system_msgs/      # Shared custom message definitions
-├── Docker/               # Docker environment setup
-│   ├── Dockerfile
-│   └── docker-compose.yml
+├── ROS2_Docker/                # Docker setup folder (corrected name)
+│   ├── Dockerfile              # Builds ROS 2 Docker image
+│   ├── instructions.md         # Build/run usage notes
+│   └── your_ros2_installer.sh  # Installer script run inside the container
 ├── README.md             # Project documentation
 └── colcon.meta           # (Optional) colcon metadata for workspace configuration
 ```
