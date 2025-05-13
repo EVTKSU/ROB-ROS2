@@ -56,7 +56,7 @@ source install/setup.bash
 
 ### Option 1: Run each node individually
 
-In separate terminals (make sure to source `install/setup.bash` in each):
+In separate terminals **(make sure to source `install/setup.bash` in each)**:
 
 Terminal 1:
 ```bash
@@ -67,6 +67,7 @@ Terminal 2:
 ```bash
 ros2 run pub_sub_demo listener
 ```
+> Reminder: source `install/setup.bash` in both terminals
 
 ### Option 2: Use the launch file to run both nodes together
 
