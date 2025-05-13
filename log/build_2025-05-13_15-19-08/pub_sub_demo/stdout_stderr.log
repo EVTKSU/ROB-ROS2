@@ -1,0 +1,28 @@
+running egg_info
+writing ../../build/pub_sub_demo/pub_sub_demo.egg-info/PKG-INFO
+writing dependency_links to ../../build/pub_sub_demo/pub_sub_demo.egg-info/dependency_links.txt
+writing entry points to ../../build/pub_sub_demo/pub_sub_demo.egg-info/entry_points.txt
+writing requirements to ../../build/pub_sub_demo/pub_sub_demo.egg-info/requires.txt
+writing top-level names to ../../build/pub_sub_demo/pub_sub_demo.egg-info/top_level.txt
+reading manifest file '../../build/pub_sub_demo/pub_sub_demo.egg-info/SOURCES.txt'
+writing manifest file '../../build/pub_sub_demo/pub_sub_demo.egg-info/SOURCES.txt'
+running build
+running build_py
+copying pub_sub_demo/listener.py -> /home/colin/Desktop/REPOS/ROB-ROS2/build/pub_sub_demo/build/lib/pub_sub_demo
+copying pub_sub_demo/talker.py -> /home/colin/Desktop/REPOS/ROB-ROS2/build/pub_sub_demo/build/lib/pub_sub_demo
+running install
+running install_lib
+copying /home/colin/Desktop/REPOS/ROB-ROS2/build/pub_sub_demo/build/lib/pub_sub_demo/listener.py -> /home/colin/Desktop/REPOS/ROB-ROS2/install/pub_sub_demo/lib/python3.12/site-packages/pub_sub_demo
+copying /home/colin/Desktop/REPOS/ROB-ROS2/build/pub_sub_demo/build/lib/pub_sub_demo/talker.py -> /home/colin/Desktop/REPOS/ROB-ROS2/install/pub_sub_demo/lib/python3.12/site-packages/pub_sub_demo
+byte-compiling /home/colin/Desktop/REPOS/ROB-ROS2/install/pub_sub_demo/lib/python3.12/site-packages/pub_sub_demo/listener.py to listener.cpython-312.pyc
+byte-compiling /home/colin/Desktop/REPOS/ROB-ROS2/install/pub_sub_demo/lib/python3.12/site-packages/pub_sub_demo/talker.py to talker.cpython-312.pyc
+running install_data
+creating /home/colin/Desktop/REPOS/ROB-ROS2/install/pub_sub_demo/share/pub_sub_demo/launch
+copying launch/pub_sub_demo.launch.py -> /home/colin/Desktop/REPOS/ROB-ROS2/install/pub_sub_demo/share/pub_sub_demo/launch
+running install_egg_info
+removing '/home/colin/Desktop/REPOS/ROB-ROS2/install/pub_sub_demo/lib/python3.12/site-packages/pub_sub_demo-0.0.0-py3.12.egg-info' (and everything under it)
+Copying ../../build/pub_sub_demo/pub_sub_demo.egg-info to /home/colin/Desktop/REPOS/ROB-ROS2/install/pub_sub_demo/lib/python3.12/site-packages/pub_sub_demo-0.0.0-py3.12.egg-info
+running install_scripts
+Installing listener script to /home/colin/Desktop/REPOS/ROB-ROS2/install/pub_sub_demo/lib/pub_sub_demo
+Installing talker script to /home/colin/Desktop/REPOS/ROB-ROS2/install/pub_sub_demo/lib/pub_sub_demo
+writing list of installed files to '/home/colin/Desktop/REPOS/ROB-ROS2/build/pub_sub_demo/install.log'

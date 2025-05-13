@@ -1,0 +1,30 @@
+[0.468s] Invoking command in '/home/colin/Desktop/REPOS/ROB-ROS2/src/pub_sub_demo': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/colin/Desktop/REPOS/ROB-ROS2/build/pub_sub_demo/prefix_override:/home/colin/Desktop/REPOS/ROB-ROS2/install/pub_sub_demo/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/pub_sub_demo build --build-base /home/colin/Desktop/REPOS/ROB-ROS2/build/pub_sub_demo/build install --record /home/colin/Desktop/REPOS/ROB-ROS2/build/pub_sub_demo/install.log --single-version-externally-managed install_data
+[0.624s] running egg_info
+[0.635s] writing ../../build/pub_sub_demo/pub_sub_demo.egg-info/PKG-INFO
+[0.636s] writing dependency_links to ../../build/pub_sub_demo/pub_sub_demo.egg-info/dependency_links.txt
+[0.636s] writing entry points to ../../build/pub_sub_demo/pub_sub_demo.egg-info/entry_points.txt
+[0.636s] writing requirements to ../../build/pub_sub_demo/pub_sub_demo.egg-info/requires.txt
+[0.636s] writing top-level names to ../../build/pub_sub_demo/pub_sub_demo.egg-info/top_level.txt
+[0.658s] reading manifest file '../../build/pub_sub_demo/pub_sub_demo.egg-info/SOURCES.txt'
+[0.658s] writing manifest file '../../build/pub_sub_demo/pub_sub_demo.egg-info/SOURCES.txt'
+[0.658s] running build
+[0.658s] running build_py
+[0.659s] copying pub_sub_demo/listener.py -> /home/colin/Desktop/REPOS/ROB-ROS2/build/pub_sub_demo/build/lib/pub_sub_demo
+[0.659s] copying pub_sub_demo/talker.py -> /home/colin/Desktop/REPOS/ROB-ROS2/build/pub_sub_demo/build/lib/pub_sub_demo
+[0.659s] running install
+[0.662s] running install_lib
+[0.673s] copying /home/colin/Desktop/REPOS/ROB-ROS2/build/pub_sub_demo/build/lib/pub_sub_demo/listener.py -> /home/colin/Desktop/REPOS/ROB-ROS2/install/pub_sub_demo/lib/python3.12/site-packages/pub_sub_demo
+[0.673s] copying /home/colin/Desktop/REPOS/ROB-ROS2/build/pub_sub_demo/build/lib/pub_sub_demo/talker.py -> /home/colin/Desktop/REPOS/ROB-ROS2/install/pub_sub_demo/lib/python3.12/site-packages/pub_sub_demo
+[0.673s] byte-compiling /home/colin/Desktop/REPOS/ROB-ROS2/install/pub_sub_demo/lib/python3.12/site-packages/pub_sub_demo/listener.py to listener.cpython-312.pyc
+[0.674s] byte-compiling /home/colin/Desktop/REPOS/ROB-ROS2/install/pub_sub_demo/lib/python3.12/site-packages/pub_sub_demo/talker.py to talker.cpython-312.pyc
+[0.674s] running install_data
+[0.674s] creating /home/colin/Desktop/REPOS/ROB-ROS2/install/pub_sub_demo/share/pub_sub_demo/launch
+[0.674s] copying launch/pub_sub_demo.launch.py -> /home/colin/Desktop/REPOS/ROB-ROS2/install/pub_sub_demo/share/pub_sub_demo/launch
+[0.675s] running install_egg_info
+[0.686s] removing '/home/colin/Desktop/REPOS/ROB-ROS2/install/pub_sub_demo/lib/python3.12/site-packages/pub_sub_demo-0.0.0-py3.12.egg-info' (and everything under it)
+[0.686s] Copying ../../build/pub_sub_demo/pub_sub_demo.egg-info to /home/colin/Desktop/REPOS/ROB-ROS2/install/pub_sub_demo/lib/python3.12/site-packages/pub_sub_demo-0.0.0-py3.12.egg-info
+[0.686s] running install_scripts
+[0.758s] Installing listener script to /home/colin/Desktop/REPOS/ROB-ROS2/install/pub_sub_demo/lib/pub_sub_demo
+[0.758s] Installing talker script to /home/colin/Desktop/REPOS/ROB-ROS2/install/pub_sub_demo/lib/pub_sub_demo
+[0.758s] writing list of installed files to '/home/colin/Desktop/REPOS/ROB-ROS2/build/pub_sub_demo/install.log'
+[0.774s] Invoked command in '/home/colin/Desktop/REPOS/ROB-ROS2/src/pub_sub_demo' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/colin/Desktop/REPOS/ROB-ROS2/build/pub_sub_demo/prefix_override:/home/colin/Desktop/REPOS/ROB-ROS2/install/pub_sub_demo/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/pub_sub_demo build --build-base /home/colin/Desktop/REPOS/ROB-ROS2/build/pub_sub_demo/build install --record /home/colin/Desktop/REPOS/ROB-ROS2/build/pub_sub_demo/install.log --single-version-externally-managed install_data

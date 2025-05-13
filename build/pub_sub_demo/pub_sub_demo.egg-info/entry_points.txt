@@ -1,0 +1,3 @@
+[console_scripts]
+listener = pub_sub_demo.listener:main
+talker = pub_sub_demo.talker:main
