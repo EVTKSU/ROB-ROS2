@@ -1,0 +1,45 @@
+# === ROS 2 build artifacts ===
+build/
+install/
+log/
+
+# === Python cache and artifacts ===
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+*.log
+
+# === CMake and colcon extras ===
+CMakeFiles/
+CMakeCache.txt
+*.cmake
+*.swp
+colcon.meta
+
+# === Editor / IDE files ===
+.vscode/
+.idea/
+*.code-workspace
+*.sublime-project
+*.sublime-workspace
+
+# === System files ===
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# === Docker volumes (optional) ===
+*.tar
+*.img
+*.log
+
+# === Launch and generated data (optional if not needed in Git) ===
+*.launch.py~
+*.launch.xml~
+
+# === ROS 2 bag files (optional) ===
+*.db3
+*.bag
+*.bag.active
+*.mcap

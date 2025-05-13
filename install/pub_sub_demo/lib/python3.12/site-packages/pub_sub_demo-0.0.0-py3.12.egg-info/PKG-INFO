@@ -1,7 +1,0 @@
-Metadata-Version: 2.1
-Name: pub-sub-demo
-Version: 0.0.0
-Summary: Minimal pub/sub demo for ROS 2 Jazzy
-Maintainer: colin
-Maintainer-email: colinhaskins2022@gmail.com
-License: MIT
