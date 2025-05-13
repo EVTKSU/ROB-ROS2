@@ -6,59 +6,96 @@ ROS 2 workspace for EVT's MINI-ROB autonomous vehicle project.
 
 ## Table of Contents
 
+- [First-Time Setup](#first-time-setup)
 - [Docker](#docker)
 - [ROS 2 Workspace Structure](#ros-2-workspace-structure)
 - [Strict Folder Requirements](#strict-folder-requirements)
 - [Creating a New Python Package](#creating-a-new-python-package)
 - [Building and Sourcing the Workspace](#building-and-sourcing-the-workspace)
+- [Running a Demo Package](#running-a-demo-package)
+- [Version Control and Ignoring Build Artifacts](#version-control-and-ignoring-build-artifacts)
 - [Best Practices](#best-practices)
+
+---
+
+## First-Time Setup
+
+For new developers setting up the workspace:
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/YOUR_TEAM/ROB-ROS2.git
+cd ROB-ROS2
+```
+
+2. Install ROS 2 Jazzy (if not already installed). Follow the official instructions:
+   https://docs.ros.org/en/jazzy/Installation.html
+
+3. Source ROS 2 before building:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+```
+
+4. Build the workspace:
+
+```bash
+colcon build
+```
+
+5. Source the overlay:
+
+```bash
+source install/setup.bash
+```
+
+You are now ready to run nodes or launch files.
 
 ---
 
 ## Docker
 
-> **Note:** The Docker image may not work for certain (newer) Apple devices due to the Ubuntu install filetype.
+> Note: The Docker image may not work for certain (newer) Apple devices due to the Ubuntu install filetype.
 
 ### Build the Docker Image
 
 1. Ensure Docker Engine is running in Docker Desktop.
-2. Open a terminal, navigate to the directory containing your Dockerfile, and execute the following commands:
-
-**Build the Docker container:**
+2. Open a terminal, navigate to the directory containing your Dockerfile (`ROS2_Docker/`), and run:
 
 ```bash
 docker build -t ros2_image .
 ```
 
-**Run the Docker container:**
+### Run the Docker Container
 
 ```bash
 docker run -it ros2_image
 ```
 
-*This setup creates a Docker image based on Ubuntu, installs necessary dependencies, and runs your ROS 2 installer script inside the container.*
+This creates a Docker image based on Ubuntu, installs ROS 2 dependencies, and runs your ROS 2 installer script inside the container.
 
-**Type `exit` to leave the container in your terminal.**
+Use `exit` to leave the container.
 
 ---
 
 ## ROS 2 Workspace Structure
 
-This repository uses a standard [colcon](https://colcon.readthedocs.io/en/released/) build system with the following ROS 2 workspace layout:
+This repository uses the standard `colcon` build system with the following layout:
 
 ```
-ROB-ROS2/                 # Repository root
-├── src/                  # ROS 2 workspace source folder (strict requirement)
-│   ├── demo_setups/      # Contains simple Python demo packages
-│   │   ├── pub_sub_demo/ # Minimal pub/sub example
-│   │   └── service_demo/ # Minimal service/client example
-│   └── system_msgs/      # Shared custom message definitions
-├── ROS2_Docker/                # Docker setup folder (corrected name)
-│   ├── Dockerfile              # Builds ROS 2 Docker image
-│   ├── instructions.md         # Build/run usage notes
-│   └── your_ros2_installer.sh  # Installer script run inside the container
-├── README.md             # Project documentation
-└── colcon.meta           # (Optional) colcon metadata for workspace configuration
+ROB-ROS2/
+├── src/
+│   ├── pub_sub_demo/          # Minimal pub/sub demo (launchable)
+│   ├── system_msgs/           # Shared custom message definitions
+│   └── ...                    # Future ROS packages
+├── ROS2_Docker/               # Docker setup and install scripts
+│   ├── Dockerfile
+│   ├── instructions.md
+│   └── your_ros2_installer.sh
+├── .gitignore
+├── README.md
+└── colcon.meta                # Optional colcon config
 ```
 
 ---
@@ -67,66 +104,53 @@ ROB-ROS2/                 # Repository root
 
 ROS 2 workspaces have strict structure rules:
 
-1. **All ROS 2 packages must reside inside the `src/` folder.**
-2. Each package must contain:
-   - `package.xml` — Defines dependencies and metadata.
-   - `setup.py` (for Python) or `CMakeLists.txt` (for C++).
-3. The workspace must be built from the root directory (same level as `src/`).
+1. All ROS 2 packages **must be in `src/`**.
+2. Each package must include:
+   - `package.xml`
+   - `setup.py` (for Python) or `CMakeLists.txt` (for C++)
+3. You must build from the root (above `src/`) using `colcon build`.
 
-Failing to follow this structure may cause `colcon` to skip packages or fail silently.
+Failing to follow this structure may cause packages to be skipped or not recognized.
 
 ---
 
 ## Creating a New Python Package
 
-To create a new Python-based ROS 2 package:
+To create a new ROS 2 Python package:
 
 ```bash
-cd ~/ROB-ROS2/src
-ros2 pkg create --build-type ament_python my_new_package
+cd src
+ros2 pkg create --build-type ament_python your_new_package
 ```
 
-This command generates the following structure:
+Typical structure:
 
 ```
-my_new_package/
+your_new_package/
 ├── package.xml
 ├── setup.py
 ├── setup.cfg
 ├── resource/
-│   └── my_new_package
-├── my_new_package/
-│   ├── __init__.py
-│   └── my_node.py
-└── launch/
-    └── my_launch_file.launch.py
+│   └── your_new_package
+├── your_new_package/
+│   └── your_node.py
+├── launch/
+│   └── your_launch_file.launch.py
 ```
-
-Ensure that:
-
-- The `package.xml` file specifies all necessary dependencies.
-- The `setup.py` and `setup.cfg` files are correctly configured for installation.
-- The Python module directory (`my_new_package/`) contains your node scripts.
 
 ---
 
 ## Building and Sourcing the Workspace
 
-From the root of your workspace (`ROB-ROS2/`):
+From the root of `ROB-ROS2/`:
 
 ```bash
-source /opt/ros/<ros_distro>/setup.bash  # Replace <ros_distro> with your ROS 2 distribution (e.g., foxy, humble)
-colcon build --symlink-install
+source /opt/ros/jazzy/setup.bash
+colcon build
 source install/setup.bash
 ```
 
-Now you can run your nodes:
-
-```bash
-ros2 run my_new_package my_node
-```
-
-Or manually echo/test topics:
+To test communication:
 
 ```bash
 ros2 topic list
@@ -135,12 +159,55 @@ ros2 topic echo /your_topic
 
 ---
 
+## Running a Demo Package
+
+This workspace includes a demo ROS 2 package: `pub_sub_demo`.
+
+It shows how to create:
+- A publisher node (`talker.py`)
+- A subscriber node (`listener.py`)
+- A launch file (`pub_sub_demo.launch.py`)
+
+### Run the demo:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source install/setup.bash
+ros2 launch pub_sub_demo pub_sub_demo.launch.py
+```
+
+Both the talker and listener will start. The talker publishes to `/chatter`, and the listener logs the incoming messages.
+
+This package is intended to serve as a **template** for future development.
+
+---
+
+## Version Control and Ignoring Build Artifacts
+
+The following folders are automatically generated by `colcon build`:
+
+- `build/`
+- `install/`
+- `log/`
+
+These are excluded via `.gitignore` and should **not** be committed.
+
+To clean and rebuild the workspace:
+
+```bash
+rm -rf build/ install/ log/
+colcon build
+```
+
+---
+
 ## Best Practices
 
-- **Workspace Structure:** Maintain a single workspace (`ROB-ROS2/`) with all packages inside the `src/` directory.
-- **Package Creation:** Use `ros2 pkg create` to generate new packages, ensuring proper structure and configuration.
-- **Version Control:** Keep Docker configurations and ROS 2 packages in separate directories to avoid conflicts.
-- **Documentation:** Include a `README.md` in each package to describe its purpose and usage.
-- **Source Management:** Avoid sourcing the workspace's `setup.bash` in your `.bashrc` to prevent environment conflicts. Instead, source it manually in each new terminal session.
+- Keep all ROS 2 packages inside `src/`.
+- Use `ros2 pkg create` to generate clean package scaffolds.
+- Include a `README.md` in each package to explain its purpose.
+- Do not track `build/`, `install/`, or `log/` in Git.
+- Do not source `install/setup.bash` in `.bashrc`; source it manually in each terminal.
+- Use launch files for multi-node coordination and testing.
 
 ---
