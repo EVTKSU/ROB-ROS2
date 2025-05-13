@@ -20,6 +20,10 @@ ROS 2 workspace for EVT's MINI-ROB autonomous vehicle project.
 
 ## First-Time Setup
 
+> NOTE: ROS2 requires linux, if not on linux use the docker (in the docker this setup is not neccesary)
+
+> *This is a bare-bones setup, for full ROS2 + dependency setup, run the "your_ros2_installer.sh" from the ROS2_Docker folder*
+
 For new developers setting up the workspace:
 
 1. Clone the repository:
