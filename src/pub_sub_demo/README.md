@@ -112,9 +112,3 @@ source install/setup.bash
 
 ---
 
-## Future Additions
-
-- Custom message types via a shared `system_msgs` package
-- ROS services and actions
-- Bag file recording and playback with `ros2 bag`
-- Visualization and debugging using `rqt_graph` or `rviz2`
