@@ -1,0 +1,18 @@
+from launch import LaunchDescription
+from launch_ros.actions import Node
+
+def generate_launch_description():
+    return LaunchDescription([
+        Node(
+            package='pi5_UDP',
+            executable='udp_sender',
+            name='udp_sender_node',
+            output='screen'
+        ),
+        Node(
+            package='pi5_UDP',
+            executable='udp_receiver',
+            name='udp_receiver_node',
+            output='screen'
+        ),
+    ])
