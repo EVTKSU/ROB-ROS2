@@ -19,10 +19,6 @@ setup(
     description='ROS 2 package for UDP communication on Raspberry Pi 5',
     license='MIT',
     tests_require=['pytest'],
-    entry_points={
-        'console_scripts': [
-            'udp_sender = pi5_UDP.udp_sender:main',
-            'udp_receiver = pi5_UDP.udp_receiver:main',
-        ],
-    },
+    entry_points={ 'console_scripts': [ 'udp_sender = pi5_UDP.udp_sender:main', 'udp_receiver = pi5_UDP.udp_receiver:main', 'pseudo_auto_mode = pi5_UDP.pseudo_auto_mode:main', ], },
+
 )

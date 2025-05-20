@@ -7,12 +7,19 @@ def generate_launch_description():
             package='pi5_UDP',
             executable='udp_sender',
             name='udp_sender_node',
-            output='screen'
+            output='screen',
+            emulate_tty=True
         ),
         Node(
             package='pi5_UDP',
             executable='udp_receiver',
             name='udp_receiver_node',
+            output='screen'
+        ),
+        Node(
+            package='pi5_UDP',
+            executable='pseudo_auto_mode',
+            name='pseudo_auto_mode_node',
             output='screen'
         ),
     ])

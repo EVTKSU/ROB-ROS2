@@ -1,34 +1,33 @@
 import rclpy
 from rclpy.node import Node
+from std_msgs.msg import String
 import socket
 
 class UDPSender(Node):
     def __init__(self):
-        super().__init__('udp_sender')  # Initialize the ROS 2 node with the name 'udp_sender'
+        super().__init__('udp_sender')
 
-        # Create a UDP socket using IPv4 addressing
+        # Create a subscriber to the 'auto_commands' topic
+        self.subscription = self.create_subscription(
+            String,
+            'auto_commands',
+            self.listener_callback,
+            10)
+
+        # Set up the UDP socket
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
-        # Define the target IP and port to send messages to
         self.target_ip = '192.168.1.100'  # Replace with the receiver's IP address
         self.target_port = 5005  # Replace with the receiver's port number
 
-        # Set up a timer to call the send_message function every 1.0 seconds
-        self.timer = self.create_timer(1.0, self.send_message)
-
-    def send_message(self):
-        # Define the message to be sent
-        message = b'Hello from ROS 2 UDP sender'
-
-        # Send the message to the specified IP and port
+    def listener_callback(self, msg):
+        # Send the received message via UDP
+        message = msg.data.encode('utf-8')
         self.sock.sendto(message, (self.target_ip, self.target_port))
-
-        # Log the sent message
-        self.get_logger().info(f'Sent: {message}')
+        self.get_logger().info(f'Sent: "{msg.data}"')
 
 def main(args=None):
-    rclpy.init(args=args)  # Initialize the ROS 2 Python client library
-    node = UDPSender()     # Create an instance of the UDPSender node
-    rclpy.spin(node)       # Keep the node running, processing callbacks
-    node.destroy_node()    # Clean up the node upon shutdown
-    rclpy.shutdown()       # Shutdown the ROS 2 Python client library
+    rclpy.init(args=args)
+    node = UDPSender()
+    rclpy.spin(node)
+    node.destroy_node()
+    rclpy.shutdown()
