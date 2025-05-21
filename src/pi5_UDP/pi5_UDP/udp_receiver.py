@@ -2,36 +2,58 @@ import rclpy
 from rclpy.node import Node
 import socket
 
+# Import your custom message
+from system_msgs.msg import TeensyTelemetry
+
 class UDPReceiver(Node):
     def __init__(self):
-        super().__init__('udp_receiver')  # Initialize the ROS 2 node with the name 'udp_receiver'
+        super().__init__('udp_receiver')
 
-        # Create a UDP socket using IPv4 addressing
+        # Create a ROS 2 publisher for the teensy_telemetry topic
+        self.publisher_ = self.create_publisher(TeensyTelemetry, 'teensy_telemetry', 10)
+
+        # Set up a non-blocking UDP socket on port 5005
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
-        # Bind the socket to all available interfaces on port 5005
-        self.sock.bind(('', 5005))  # Replace with desired port if different
-
-        # Set the socket to non-blocking mode to prevent blocking the node
+        self.sock.bind(('', 5005))  # Listen on all interfaces
         self.sock.setblocking(False)
 
-        # Set up a timer to call the receive_message function every 0.1 seconds
+        # Use a timer to poll the socket every 0.1s
         self.timer = self.create_timer(0.1, self.receive_message)
 
     def receive_message(self):
         try:
-            # Attempt to receive data from the socket
-            data, addr = self.sock.recvfrom(1024)  # Buffer size is 1024 bytes
+            data, addr = self.sock.recvfrom(1024)  # Max 1 KB packet
+            message_str = data.decode().strip()
 
-            # Log the received message along with the sender's address
-            self.get_logger().info(f'Received from {addr}: {data.decode()}')
+            # Expecting format like: "AUTO,540.2,23.5,49.1,13.2,5.8,3.4,0.8"
+            parts = message_str.split(',')
+
+            if len(parts) != 8:
+                self.get_logger().warn(f"Invalid telemetry packet: {message_str}")
+                return
+
+            # Populate TeensyTelemetry message
+            msg = TeensyTelemetry()
+            msg.state = parts[0]
+            msg.rpm = float(parts[1])
+            msg.vesc_voltage = float(parts[2])
+            msg.odrv_voltage = float(parts[3])
+            msg.avg_motor_current = float(parts[4])
+            msg.odrv_current = float(parts[5])
+            msg.steering_angle = float(parts[6])
+            msg.velocity = float(parts[7])
+
+            # Publish it
+            self.publisher_.publish(msg)
+            self.get_logger().info(f"Published telemetry from {addr}")
+
         except BlockingIOError:
-            # No data received; non-blocking socket would raise this exception
+            # No UDP packet available — this is normal in non-blocking mode
             pass
 
 def main(args=None):
-    rclpy.init(args=args)  # Initialize the ROS 2 Python client library
-    node = UDPReceiver()   # Create an instance of the UDPReceiver node
-    rclpy.spin(node)       # Keep the node running, processing callbacks
-    node.destroy_node()    # Clean up the node upon shutdown
-    rclpy.shutdown()       # Shutdown the ROS 2 Python client library
+    rclpy.init(args=args)
+    node = UDPReceiver()
+    rclpy.spin(node)
+    node.destroy_node()
+    rclpy.shutdown()

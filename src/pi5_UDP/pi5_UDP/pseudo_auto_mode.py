@@ -16,7 +16,7 @@ class PseudoAutoMode(Node):
         self.publisher_ = self.create_publisher(String, 'auto_commands', 10)
 
         # Set the timer period to 1.0 second
-        timer_period = 1.0  # seconds
+        timer_period = 1.0  # seconds 
 
         # Create a timer that calls the timer_callback function every timer_period seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
