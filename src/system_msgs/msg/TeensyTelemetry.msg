@@ -1,8 +1,10 @@
+bool emergency
 string state
 float32 rpm
-float32 vesc_voltage
-float32 odrv_voltage
-float32 avg_motor_current
-float32 odrv_current
 float32 steering_angle
-float32 velocity
+float32 odrv_voltage
+float32 vesc_voltage
+float32 odrv_current
+float32 vesc_current
+float32 rc_steering_input
+float32 rc_throttle_input
