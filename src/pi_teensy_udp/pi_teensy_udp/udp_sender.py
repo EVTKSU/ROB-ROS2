@@ -16,9 +16,9 @@ class UDPSender(Node):
 
         # Set up the UDP socket
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.target_ip = '192.168.1.100'  # Replace with the receiver's IP address
-        self.target_port = 5005  # Replace with the receiver's port number
-
+        self.target_ip = '192.168.0.177'  # teensy IP
+        self.target_port = 8888  
+        
     def listener_callback(self, msg):
         # Send the received message via UDP
         message = msg.data.encode('utf-8')
