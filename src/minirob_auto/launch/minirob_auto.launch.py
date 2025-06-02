@@ -4,23 +4,41 @@ from launch.actions import ExecuteProcess
 
 def generate_launch_description():
     return LaunchDescription([
-        # 1) Launch the main minirob_auto node
+        # 1) Lane detection node (identical logic to Triton AI’s script)
         Node(
             package='minirob_auto',
-            executable='minirob_auto_node',
-            name='minirob_auto',
+            executable='lane_detection_node',
+            name='lane_detection',
+            output='screen',
+            parameters=[{}],
+        ),
+
+        # 2) Lane traversal node
+        Node(
+            package='minirob_auto',
+            executable='lane_traversal_node',
+            name='lane_traversal',
             output='screen',
             parameters=[{
-                'throttle_percent': 50.0,  # default throttle % (0–100)
+                'throttle_percent': 50.0
             }],
         ),
 
-        # 2) Open an xterm that echoes /auto_commands
+        # 3) Auto control node
+        Node(
+            package='minirob_auto',
+            executable='auto_control_node',
+            name='auto_control',
+            output='screen',
+            parameters=[{}],
+        ),
+
+        # 4) (Optional) Open an xterm echoing /auto_commands for debugging
         ExecuteProcess(
             cmd=[
                 'xterm',
-                '-hold',      # keep the xterm open after the command exits
-                '-e',         # execute the following command
+                '-hold',
+                '-e',
                 'ros2', 'topic', 'echo', '/auto_commands'
             ],
             output='screen'
