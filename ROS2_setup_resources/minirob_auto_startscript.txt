@@ -1,0 +1,27 @@
+cd ~/ros2_ws
+
+# 1) Clean old artifacts (optional but recommended)
+rm -rf build/ install/ log/
+
+# 2) Source ROS 2 environment
+source /opt/ros/jazzy/setup.bash
+
+# 3) Build everything (including minirob_auto)
+colcon build --symlink-install
+
+# 4) Source the newly built overlay
+source install/setup.bash
+
+# 5) Verify the package is registered
+ros2 pkg list | grep minirob_auto
+# Should output: minirob_auto
+
+# 6) Verify the node executable is available
+ros2 pkg executables minirob_auto
+# Should output: Executables in package [minirob_auto]: minirob_auto_node
+
+# 7) Run the node directly
+ros2 run minirob_auto minirob_auto_node
+
+# Or launch with the launch file:
+ros2 launch minirob_auto minirob_auto_launch.py
