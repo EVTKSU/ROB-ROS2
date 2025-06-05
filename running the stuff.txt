@@ -1,0 +1,28 @@
+to rebuild a ws:
+
+rm -rf build install log
+
+cd ~/Desktop/rob/ROB-ROS2
+colcon build --symlink-install
+source install/setup.bash
+
+running:
+
+
+to run auto:
+---------------
+ros2 launch minirob_auto minirob_auto.launch.py
+---------------
+
+
+to run teensy:
+---------------
+ros2 launch pi_teensy_udp pi_teensy_udp.launch.py
+---------------
+
+
+to run videorecord:
+---------------
+ros2 launch video_recorder video_recorder.launch.py
+---------------
+
