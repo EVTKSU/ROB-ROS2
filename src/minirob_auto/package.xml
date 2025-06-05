@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>minirob_auto</name>
+  <version>0.1.0</version>
+  <description>
+    Splitified package: 
+    1) lane_detection_node (YOLOv8 segmentation → /steer_pct),
+    2) lane_traversal_node (/steer_pct → /percent_cmds),
+    3) auto_control_node (/percent_cmds → UDP + /auto_commands).
+  </description>
+
+  <maintainer email="you@example.com">Your Name</maintainer>
+  <license>Apache-2.0</license>
+
+  <!-- Pure-Python ROS 2 nodes -->
+  <buildtool_depend>ament_python</buildtool_depend>
+
+  <!-- Runtime dependencies -->
+  <depend>rclpy</depend>
+  <depend>cv_bridge</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>depthai</depend>
+  <depend>numpy</depend>
+  <depend>opencv_python</depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

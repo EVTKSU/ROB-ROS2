@@ -85,7 +85,7 @@ source install/setup.bash
 To launch all nodes:
 
 ```bash
-ros2 launch pi5_udp pi5_udp.launch.py
+ros2 launch pi_teensy_udp pi_teensy_udp.launch.py
 ```
 
 To run nodes individually:
