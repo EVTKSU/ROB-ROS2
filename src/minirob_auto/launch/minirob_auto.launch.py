@@ -1,6 +1,11 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.actions import ExecuteProcess
+import os 
+
+
+os.system("python3 /home/evt/Desktop/Startup_Noises.py")   
+os.system("python3 /home/evt/Desktop/Initialized.py")   
 
 def generate_launch_description():
     return LaunchDescription([

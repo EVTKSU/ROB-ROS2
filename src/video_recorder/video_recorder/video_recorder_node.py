@@ -13,13 +13,15 @@ import depthai
 import rclpy
 import numpy as np
 
+from datetime import datetime
+
 from rclpy.node import Node
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 
 # Desired resolution (match your YOLO model or requirements)
-CAM_W, CAM_H = 320, 192
-FRAME_RATE = 30  # fps for recording
+CAM_W, CAM_H = 854, 480
+FRAME_RATE = 30 # FPS for recording
 
 class VideoRecorder(Node):
     def __init__(self):
@@ -28,6 +30,10 @@ class VideoRecorder(Node):
         # Publisher: /video_frames (sensor_msgs/Image)
         self.pub_frame = self.create_publisher(Image, 'video_frames', 10)
         self.bridge = CvBridge()
+
+        # Get the current date
+        self.now: datetime = datetime.now()
+        self.formatted_time: str = self.now.strftime('%m_%d-%H:%M:%S')
 
         # Set up DepthAI pipeline
         pipeline = depthai.Pipeline()
@@ -45,7 +51,7 @@ class VideoRecorder(Node):
 
         # Set up OpenCV VideoWriter for raw video
         fourcc = cv2.VideoWriter_fourcc(*'XVID')
-        out_path = os.path.join(os.path.expanduser('~'), 'raw_output.avi')
+        out_path = os.path.join(os.path.expanduser('~'), f'raw_output_{self.formatted_time}.avi')
         self.video_writer = cv2.VideoWriter(out_path, fourcc, FRAME_RATE, (CAM_W, CAM_H))
         self.get_logger().info(f"Recording raw video to: {out_path}")
 

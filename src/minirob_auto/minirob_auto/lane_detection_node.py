@@ -1,138 +1,141 @@
-#!/usr/bin/env python3
-"""
-lane_detection_node.py
-
-1) Captures OAK-D LR frames via DepthAI.
-2) Runs YOLO v8 segmentation (best.pt) to get a binary mask.
-3) Computes centroid-based steering percentage in [-100, +100].
-4) Publishes that as a std_msgs/Float32 on /steer_pct.
-"""
-
-import os
-import cv2
-import numpy as np
-import depthai
 import rclpy
 from rclpy.node import Node
+from sensor_msgs.msg import Image
+from sensor_msgs.msg import CompressedImage
 from std_msgs.msg import Float32
+import cv2
+from cv_bridge import CvBridge
+import os
+from ament_index_python import get_package_share_directory
+from ultralytics import YOLO
+import numpy as np
+from shapely.geometry import Polygon, LineString
+from shapely.ops import split
+import time
 
-from ultralytics import YOLO  # YOLO v8 API
+# Nodes in this program
+NODE_NAME = 'lane_detection_node'
 
-# PID gains for smoothing (if needed later). For pure centroid, KP alone may suffice.
-_KP = 0.038
-_KI = 0.0
-_KD = 0.008
+# Topics subscribed/published to in this program
+CAMERA_TOPIC_NAME = '/oak/rgb/image_raw'
+SIM_CAMERA_TOPIC_NAME = '/camera_link/image/compressed'
+CENTROID_ERROR_TOPIC_NAME = '/centroid error'
 
-# Match the training resolution of best.pt (height,width)
-CAM_W, CAM_H = 320, 192
-INFER_HZ     = 30  # frames/sec
+MODEL_PATH = os.path.join(get_package_share_directory("lane_detection"), "models/best.pt")
+
 
 class LaneDetection(Node):
     def __init__(self):
-        super().__init__('lane_detection')
+        super().__init__(NODE_NAME)
+        self.centroid_error_publisher = self.create_publisher(Float32, CENTROID_ERROR_TOPIC_NAME, 10)
+        self.camera_subscriber = self.create_subscription(Image, CAMERA_TOPIC_NAME, self.locate_centroid, 10)
+        self.bridge = CvBridge()
+        self.sim_camera_sub = self.create_subscription(CompressedImage, SIM_CAMERA_TOPIC_NAME, self.sim_locate_centroid, 10)
+        self.start_time = None
 
-        # Publisher: /steer_pct (Float32)
-        self.pub_steer = self.create_publisher(Float32, 'steer_pct', 10)
+        self.centroid_error = Float32()
 
-        # PID state (optional smoothing)
-        self.prev_error = 0.0
-        self.integral   = 0.0
+        # Initialize model
+        self.model = YOLO(MODEL_PATH)
 
-        # 1) Locate best.pt
-        pkg_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-        best_pt = os.path.join(pkg_dir, '..', 'models', 'best.pt')
-        best_pt = os.path.normpath(best_pt)
-        if not os.path.isfile(best_pt):
-            self.get_logger().error(f"Missing best.pt at: {best_pt}")
-            raise FileNotFoundError(f"Expected best.pt at {best_pt}")
+    def locate_centroid(self, data):
+        # Image processing from rosparams
+        frame = self.bridge.compressed_imgmsg_to_cv2(data)
 
-        self.get_logger().info(f"Loading YOLOv8 model from: {best_pt}")
-        self.model = YOLO(best_pt)
+        # Find contour with the highest confidence
+        results = self.model.predict(frame, conf=0.7)
+        conf = results[0].boxes.conf.tolist()
 
-        # 2) DepthAI pipeline for OAK-D LR
-        pipeline = depthai.Pipeline()
-        cam = pipeline.createColorCamera()
-        cam.setBoardSocket(depthai.CameraBoardSocket.RGB)
-        cam.setPreviewSize(CAM_W, CAM_H)
-        cam.setInterleaved(False)
+        if len(conf) != 0:
+            max_conf_index = np.argmax(conf)
+            _, width, _ = frame.shape
+            center_x = width // 2
 
-        xout = pipeline.createXLinkOut()
-        xout.setStreamName('cam')
-        cam.preview.link(xout.input)
+            # Find contour
+            coords_xy = results[max_conf_index].masks.xy[0]
+            contour = np.array(coords_xy, dtype=np.int32).reshape((-1, 1, 2))
 
-        self.device = depthai.Device(pipeline)
-        self.q_cam  = self.device.getOutputQueue(name='cam', maxSize=4, blocking=False)
+            # Find centroid
+            M = cv2.moments(contour)
+            cX = int(M["m10"] / M["m00"])
+            cY = int(M["m01"] / M["m00"])
 
-        # 3) Timer to run at INFER_HZ
-        self.create_timer(1.0 / INFER_HZ, self.timer_callback)
-        self.get_logger().info("lane_detection node initialized.")
+            # Publish centroid error
+            centroid_error = float(center_x - cX)
+            self.centroid_error.data = centroid_error
+            self.centroid_error_publisher.publish(self.centroid_error)
 
-    def timer_callback(self):
-        in_cam = self.q_cam.get()                    # depthai.ImgFrame
-        frame_bgr = in_cam.getCvFrame()              # shape: (CAM_H, CAM_W, 3)
+    def sim_locate_centroid(self, data):
 
-        # Convert to RGB for YOLO
-        frame_rgb = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2RGB)
+        if self.start_time is None:
+            self.start_time = time.time()
 
-        # YOLOv8 segmentation
-        results = self.model(frame_rgb, imgsz=(CAM_H, CAM_W))
-        res0 = results[0]
+        # Image processing from rosparams
+        frame = self.bridge.compressed_imgmsg_to_cv2(data)
 
-        # Build binary mask (H × W)
-        if res0.masks is not None and res0.masks.data.shape[0] > 0:
-            masks_data = res0.masks.data.cpu().numpy()  # shape: (n, H, W)
-            combined  = (np.sum(masks_data, axis=0) >= 0.5).astype(np.uint8) * 255
-            mask = combined
-        else:
-            mask = np.zeros((CAM_H, CAM_W), dtype=np.uint8)
+        # Find contour with the highest confidence
+        results = self.model.predict(frame, conf=0.7)
+        conf = results[0].boxes.conf.tolist()
 
-        # (Optional) Visualization
-        overlay = cv2.addWeighted(frame_bgr, 0.7,
-                                   cv2.cvtColor(mask, cv2.COLOR_GRAY2BGR),
-                                   0.3, 0)
-        cv2.imshow("Lane Detection – Mask Overlay", overlay)
-        cv2.waitKey(1)
+        if len(conf) != 0:
+            max_conf_index = np.argmax(conf)
+            _, width, _ = frame.shape
+            center_x = width // 2
 
-        # Compute centroid on bottom half → steering error
-        bottom = mask[CAM_H // 2 :, :]
-        M = cv2.moments(bottom)
-        if M['m00'] != 0:
-            cx = int(M['m10'] / M['m00'])
-        else:
-            cx = CAM_W // 2
+            # Find contour
+            coords_xy = results[max_conf_index].masks.xy[0]
+            contour = np.array(coords_xy, dtype=np.int32).reshape((-1, 1, 2))
 
-        error = (CAM_W / 2) - cx
-        # (Optional) PID smoothing
-        self.integral   += error
-        derivative      = error - self.prev_error
-        steering_corr   = _KP * error + _KI * self.integral + _KD * derivative
-        self.prev_error = error
+            # Find centroid
+            M = cv2.moments(contour)
+            cX = int(M["m10"] / M["m00"])
+            cY = int(M["m01"] / M["m00"])
 
-        # Normalize to [-1.0, +1.0], then to steer_pct [-100, +100]
-        steering_frac = max(min(steering_corr, 1.0), -1.0)
-        steer_pct     = float(steering_frac * 100.0)
+            # Draw contour
+            image_with_contour = cv2.drawContours(frame.copy(), [contour], -1, (0, 255, 0), 2)
 
-        # Publish
-        msg = Float32()
-        msg.data = steer_pct
-        self.pub_steer.publish(msg)
-        self.get_logger().info(f"Published /steer_pct: {steer_pct:.2f}")
+            # Draw centroid
+            cv2.circle(image_with_contour, (cX, cY), 5, (0, 0, 255), -1)
 
-    def destroy_node(self):
-        cv2.destroyAllWindows()
-        self.device.close()
-        super().destroy_node()
+            # Draw center line
+            cv2.line(image_with_contour, (center_x, 0), (center_x, frame.shape[0]), (255, 0, 0), 2)
+
+            # Show the frame
+            cv2.namedWindow("Frame", cv2.WINDOW_NORMAL)
+            cv2.resizeWindow("Frame", 854, 480)
+            cv2.imshow("Frame", image_with_contour)
+            cv2.waitKey(1)  # Adjust the delay as needed
+
+            # Publish centroid error
+            centroid_error = float(center_x - cX)
+            self.centroid_error.data = centroid_error
+            self.centroid_error_publisher.publish(self.centroid_error)
+            
+            if centroid_error > 0:
+                direction = "LEFT"
+            elif centroid_error < 0:
+                direction = "RIGHT"
+            else:
+                direction = "STRAIGHT"
+
+            curr_time = time.time() - self.start_time
+
+            print(f"Time: {curr_time}. Error: {self.centroid_error}. Direction: {direction}")
 
 def main(args=None):
     rclpy.init(args=args)
-    node = LaneDetection()
+    centroid_publisher = LaneDetection()
     try:
-        rclpy.spin(node)
+        rclpy.spin(centroid_publisher)
     except KeyboardInterrupt:
-        pass
-    finally:
-        node.destroy_node()
+        centroid_publisher.get_logger().info(f'Shutting down {NODE_NAME}...')
+
+        # Kill cv2 windows and node
+        cv2.destroyAllWindows()
+        centroid_publisher.destroy_node()
         rclpy.shutdown()
+        centroid_publisher.get_logger().info(f'{NODE_NAME} shut down successfully.')
+
 
 if __name__ == '__main__':
     main()

@@ -1,8 +1,7 @@
 to rebuild a ws:
 
-rm -rf build install log
-
 cd ~/Desktop/rob/ROB-ROS2
+rm -rf build install log
 colcon build --symlink-install
 source install/setup.bash
 
@@ -26,3 +25,7 @@ to run videorecord:
 ros2 launch video_recorder video_recorder.launch.py
 ---------------
 
+
+to run auto individual scripts
+
+ros2 run minirob_auto minirob_auto lane_detection_node.py
