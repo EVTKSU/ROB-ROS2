@@ -2,6 +2,7 @@ to rebuild a ws:
 
 cd ~/Desktop/rob/ROB-ROS2
 rm -rf build install log
+source /opt/ros/jazzy/setup.bash
 colcon build --symlink-install
 source install/setup.bash
 
