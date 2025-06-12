@@ -244,11 +244,17 @@ Use `exit` to leave the container.
 	source venv/bin/activate
 
 
-# from here pip install all your stuff
+# from here pip install all your stuff:
 
-to exit type '''"deactivate"''' in terminal
+		pip install depthai numpy matplotlib ultralytics pygame pyqt5
 
+# to deactivate the venv:
 
-how to open the venv:
+	deactivate
+ 
+
+# how to open the venv back up:
 
 cd into the repo and re run 
+
+source venv/bin/activate
