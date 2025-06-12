@@ -221,3 +221,34 @@ docker run -it ros2_image
 This creates a Docker image based on Ubuntu, installs ROS 2 dependencies, and runs your ROS 2 installer script inside the container.
 
 Use `exit` to leave the container.
+
+
+ First-Time Setup
+
+# how to make a venv:
+
+    make sure you have python venv installed:
+
+	'''sudo apt update
+	sudo apt install python3-venv'''
+
+
+
+# then, cd into your repo folder:
+	
+	cd ~/Desktop/rob/rob-ros2
+	
+# create and activate the venv:
+	
+	python3 -m venv venv
+	source venv/bin/activate
+
+
+# from here pip install all your stuff
+
+to exit type '''"deactivate"''' in terminal
+
+
+how to open the venv:
+
+cd into the repo and re run 
