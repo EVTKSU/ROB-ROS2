@@ -1,4 +1,24 @@
-to rebuild a ws:
+before you do anything: make a venv in vscode.
+
+1a. setup a venv
+
+    sudo apt update
+	sudo apt install python3-venv
+    python3 -m venv venv
+	source venv/bin/activate
+    pip install depthai numpy matplotlib ultralytics opencv-python pygame pyqt5 depthai-nodes
+
+1b. to deactivate the venv:
+
+	deactivate
+
+1. to reactivate the venv:
+
+	source venv/bin/activate
+
+
+
+2. to rebuild a ws:
 
 cd ~/Desktop/rob/ROB-ROS2
 rm -rf build install log
