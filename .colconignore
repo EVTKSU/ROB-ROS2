@@ -1,3 +1,4 @@
 venv/
 Python-Tests/
 recordings/
+.depthai_cached_models/

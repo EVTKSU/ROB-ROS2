@@ -246,7 +246,7 @@ Use `exit` to leave the container.
 
 # from here pip install all your stuff:
 
-		pip install depthai numpy matplotlib ultralytics pygame pyqt5
+		pip install depthai numpy matplotlib ultralytics opencv-python pygame pyqt5 depthai-nodes
 
 # to deactivate the venv:
 
