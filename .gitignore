@@ -3,7 +3,7 @@ build/
 install/
 log/
 venv/
-
+recordings/
 # === Python cache and artifacts ===
 __pycache__/
 *.py[cod]
