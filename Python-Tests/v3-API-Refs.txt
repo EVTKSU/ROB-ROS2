@@ -1,0 +1,4 @@
+in DepthAI v3 the resizing API changed: you now use 
+setOutputSize(width, height, ResizeMode) instead of setResize
+
+

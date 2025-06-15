@@ -36,7 +36,7 @@ def main():
             # 9) Fetch latest lane detections (Clusters message)
             lanes = lanes_q.tryGet()
             if lanes:
-                # Each `cluster` has a list of normalized points for one lane
+                # Each cluster has a list of normalized points for one lane
                 for cluster in lanes.clusters:
                     pts = cluster.points
                     # Draw a polyline through all points in this lane

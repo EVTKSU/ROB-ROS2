@@ -5,6 +5,7 @@ log/
 venv/
 recordings/
 .depthai_cached_models/
+Test_Images/
 # === Python cache and artifacts ===
 __pycache__/
 *.py[cod]

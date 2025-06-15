@@ -2,8 +2,7 @@
 import cv2
 
 import depthai as dai
-
-
+print(hasattr(dai.Pipeline, "createXLinkIn"))  # Should print True
 # Create pipeline
 
 with dai.Pipeline() as pipeline:
