@@ -7,16 +7,13 @@ before you do anything:
     sudo apt update
 	sudo apt install python3-venv
     python3 -m venv venv
-RuntimeError: Failed to connect to device, error message: X_LINK_DEVICE_NOT_FOUND
 	source venv/bin/activate
     pip install depthai numpy matplotlib ultralytics opencv-python pygame pyqt5 depthai-nodes
 
 1b. to deactivate the venv:
-
 	deactivate
 
 1. to reactivate the venv:
-
 	source venv/bin/activate
 
 
