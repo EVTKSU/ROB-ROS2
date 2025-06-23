@@ -1,10 +1,13 @@
-before you do anything: make a venv in vscode.
+before you do anything: 
+
+1. make a venv in vscode.
 
 1a. setup a venv
 
     sudo apt update
 	sudo apt install python3-venv
     python3 -m venv venv
+RuntimeError: Failed to connect to device, error message: X_LINK_DEVICE_NOT_FOUND
 	source venv/bin/activate
     pip install depthai numpy matplotlib ultralytics opencv-python pygame pyqt5 depthai-nodes
 
@@ -25,6 +28,16 @@ rm -rf build install log
 source /opt/ros/jazzy/setup.bash
 colcon build --symlink-install
 source install/setup.bash
+
+3. to use ethernet poe deployment:
+
+manually set ipv4 to 169.254.1.223, subnet to 255.255.0.0
+
+then use this line right before defining pipeline:
+
+device_info = dai.DeviceInfo("169.254.1.222")
+
+this will make the udp conn work!
 
 running:
 
