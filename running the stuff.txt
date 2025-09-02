@@ -1,5 +1,6 @@
 before you do anything: 
 
+
 in linux only:
 
 Execute the commands below to setup the udev rules on Linux systems:
@@ -7,22 +8,26 @@ Execute the commands below to setup the udev rules on Linux systems:
 echo 'SUBSYSTEM=="usb", ATTRS{idVendor}=="03e7", MODE="0666"' | sudo tee /etc/udev/rules.d/80-movidius.rules
 sudo udevadm control --reload-rules && sudo udevadm trigger
 
+this sets up the USB connection requirements for the OAK D cameras with USB IO, since linux does not do that for you
 
 
 1. make a venv in vscode.
 
 1a. setup a venv
-
+	cd Desktop/rob/ROB-ROS2
     sudo apt update
 	sudo apt install python3-venv
     python3 -m venv venv
 	source venv/bin/activate
-    pip install depthai numpy matplotlib ultralytics opencv-python pygame pyqt5 depthai-nodes
+    pip install  numpy matplotlib ultralytics opencv-python pygame pyqt5  
+	pip install --pre depthai --force-reinstall
 
 1b. to deactivate the venv:
+
 	deactivate
 
 1. to reactivate the venv:
+
 	source venv/bin/activate
 
 
@@ -69,3 +74,7 @@ ros2 launch video_recorder video_recorder.launch.py
 to run auto individual scripts
 
 ros2 run minirob_auto minirob_auto lane_detection_node.py
+
+
+
+
