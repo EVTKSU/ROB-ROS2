@@ -21,7 +21,9 @@ this sets up the USB connection requirements for the OAK D cameras with USB IO, 
 	source venv/bin/activate
     pip install  numpy matplotlib ultralytics opencv-python pygame pyqt5  
 	pip install --pre depthai --force-reinstall
+	touch venv/COLCON_IGNORE	
 
+	
 1b. to deactivate the venv:
 
 	deactivate
