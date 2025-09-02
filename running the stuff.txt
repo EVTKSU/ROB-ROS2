@@ -55,6 +55,15 @@ this will make the udp conn work!
 running:
 
 
+
+
+before running:
+
+sudo /usr/bin/python3 -m pip install --break-system-packages \
+  --target /opt/ros/jazzy/lib/python3.12/site-packages 'lark>=1.1,<2'
+  
+then rebuild, ros targets lark in the venv
+
 to run auto:
 ---------------
 ros2 launch minirob_auto minirob_auto.launch.py
